@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Thermal camera</title>
+    <style>
+      img { width: 100%; height: 100%; }
+    </style>
+  </head>
+
+  <body>
+    <img src="/image" />
+
+    <script>
+      const img = document.querySelector("img")
+      let num = 0
+      img.addEventListener("load", () => {
+        setTimeout(() => {
+          try {
+            img.src = "/image?" + (num++)
+          } catch {}
+        }, 100)
+      })
+    </script>
+  </body>
+</html>

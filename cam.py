@@ -38,6 +38,10 @@ def generate_image():
     img_byte_array.seek(0)
     return img_byte_array
 
+@app.route('/', methods=['GET'])
+def get_html():
+    return send_file('index.html')
+
 @app.route('/image', methods=['GET'])
 def get_image():
     return send_file(generate_image(), mimetype='image/jpeg')
