@@ -31,6 +31,7 @@ function setupImage() {
   const img = document.createElement("img");
   imgContainer.append(img);
   img.src = imageUrl;
+  img.addEventListener("load", loadData)
   return img;
 }
 
@@ -42,11 +43,11 @@ async function loadData() {
       const data = await response.text();
       dataContainer.innerHTML = renderTemperatures(data);
     }
+    setTimeout(loadData, 200);
   }
   if (activeTab === "image") {
     img.src = imageUrl + "?" + num++;
   }
-  setTimeout(loadData, 0);
 }
 
 function normalize(value) {
