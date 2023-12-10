@@ -3,17 +3,20 @@ const imageUrl = baseUrl + "/image";
 const dataUrl = baseUrl + "/data";
 
 const imgContainer = document.getElementById("image");
-const dataContainer = document.getElementById("data");
+const dataContainer = document.getElementById("data-grid");
 const tabs = document.querySelectorAll(".tabbed-content .tabs span");
 let activeTab = "data";
+
+let min = 20;
+let max = 30;
 
 tabs.forEach((tab) =>
   tab.addEventListener("click", (el) => activateTab(el.target.dataset.tab))
 );
 
 const img = setupImage();
-setInterval(loadData, 500);
-activateTab(activateTab);
+loadData();
+activateTab("data");
 
 function activateTab(tab) {
   activeTab = tab;
@@ -28,23 +31,39 @@ function setupImage() {
   const img = document.createElement("img");
   imgContainer.append(img);
   img.src = imageUrl;
-  let num = 0;
-  img.addEventListener("load", loadImage);
   return img;
 }
 
-function loadImage() {
-  if (activateTab === "image") {
-    img.src = imageUrl + "?" + num++;
-  }
-}
-
+let num = 0;
 async function loadData() {
   if (activeTab === "data") {
     const response = await fetch(dataUrl);
     if (response.ok) {
       const data = await response.text();
-      dataContainer.innerText = data;
+      dataContainer.innerHTML = renderTemperatures(data);
     }
   }
+  if (activeTab === "image") {
+    img.src = imageUrl + "?" + num++;
+  }
+  setTimeout(loadData, 0);
+}
+
+function normalize(value) {
+  return Math.round(Math.min(1, Math.max(value / (max - min), 0)) * 256);
+}
+
+function renderTemperatures(data) {
+  return data
+    .split(" ")
+    .map(Number)
+    .map((temp) => {
+      const red = normalize(temp - min);
+      const blue = normalize(max - temp);
+      return { temp, color: `rgb(${red},0,${blue})` };
+    })
+    .map(
+      ({ temp, color }) => `<span style="background:${color}">${temp}</span>`
+    )
+    .join("");
 }
