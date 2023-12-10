@@ -1,6 +1,6 @@
 import time
 import seeed_mlx9064x
-from flask import Flask, send_file
+from flask import Flask, send_file, redirect
 from flask_cors import CORS
 from PIL import Image, ImageDraw
 import numpy as np
@@ -9,7 +9,6 @@ import threading
 
 app = Flask(__name__)
 CORS(app)
-app.static_folder = 'public'
 frame = [0] * 768
 rounded = [round(num, 1) for num in frame]
 
@@ -40,6 +39,10 @@ def generate_image():
     image.save(img_byte_array, format='JPEG')
     img_byte_array.seek(0)
     return img_byte_array
+
+@app.route('/')
+def index():
+    return redirect('/static/index.html')
 
 @app.route('/image', methods=['GET'])
 def get_image():
