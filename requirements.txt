@@ -1,2 +1,3 @@
-mlx90640
+seeed-python-mlx9064x
 Flask
+flask_cors
