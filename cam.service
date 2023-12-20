@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=joachim
-WorkingDirectory=/home/joachim/thermal-cam
-ExecStart=/usr/bin/python3 /home/joachim/thermal-cam/cam.py
+WorkingDirectory=/home/thermal-cam
+ExecStart=/usr/bin/python3 /home/thermal-cam/cam.py
 Restart=always
 
 [Install]
